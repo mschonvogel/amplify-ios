@@ -57,3 +57,11 @@ type UserFollowers @model {
   user: User @connection(name: "followers")
   followersUser: User @connection
 }
+
+type Vote @model @searchable {
+  id: ID!
+  title: String!
+  createdAt: String!
+  updatedAt: String!
+  upvotes: Int
+}

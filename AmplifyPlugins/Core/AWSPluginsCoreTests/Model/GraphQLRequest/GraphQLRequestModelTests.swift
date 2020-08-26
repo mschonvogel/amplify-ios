@@ -103,6 +103,60 @@ class GraphQLRequestModelTests: XCTestCase {
         XCTAssertNotNil(request.variables)
     }
 
+    func testSearchQueryGraphQLRequest() {
+        let vote = Vote.keys
+        let predicate = vote.id.eq("id") &&
+            (vote.title.beginsWith("Title") || vote.upvotes.between(start: 10, end: 12))
+        var documentBuilder = ModelBasedGraphQLDocumentBuilder(modelType: Vote.self, operationType: .query)
+        documentBuilder.add(decorator: DirectiveNameDecorator(type: .search))
+        documentBuilder.add(decorator: FilterDecorator(filter: predicate.graphQLSearchFilter, queryType: .search))
+        documentBuilder.add(decorator: SortDecorator(sortBy: .ascending(vote.title)))
+        documentBuilder.add(decorator: PaginationDecorator(queryType: .search))
+        let document = documentBuilder.build()
+        let documentStringValue = """
+        query SearchVotes($filter: SearchableVoteFilterInput, $limit: Int, $sort: SearchableVoteSortInput) {
+          searchVotes(filter: $filter, limit: $limit, sort: $sort) {
+            items {
+              id
+              createdAt
+              title
+              updatedAt
+              upvotes
+              __typename
+            }
+            nextToken
+            total
+          }
+        }
+        """
+        let request = GraphQLRequest<Post>.search(Vote.self, where: predicate, sort: .ascending(vote.title))
+
+        XCTAssertEqual(document.stringValue, request.document)
+        XCTAssertEqual(documentStringValue, request.document)
+
+        XCTAssert(request.responseType == [Vote].self)
+        guard let variables = request.variables else {
+            XCTFail("The request doesn't contain variables")
+            return
+        }
+        guard let filter = variables["filter"] as? [String: Any] else {
+            XCTFail("The document variables property doesn't contain a filter input")
+            return
+        }
+        XCTAssertNotNil(filter)
+        guard let sort = variables["sort"] as? [String: String] else {
+            XCTFail("The document variables property doesn't contain a sort input")
+            return
+        }
+        XCTAssertEqual(sort["field"], "title")
+        XCTAssertEqual(sort["direction"], "asc")
+        guard let limit = variables["limit"] as? Int else {
+            XCTFail("The document variables property doesn't contain a sort input")
+            return
+        }
+        XCTAssertEqual(limit, 1_000)
+    }
+
     func testOnCreateSubscriptionGraphQLRequest() {
         var documentBuilder = ModelBasedGraphQLDocumentBuilder(modelType: Post.self, operationType: .subscription)
         documentBuilder.add(decorator: DirectiveNameDecorator(type: .onCreate))

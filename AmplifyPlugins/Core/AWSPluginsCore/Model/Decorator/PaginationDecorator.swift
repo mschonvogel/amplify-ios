@@ -13,10 +13,12 @@ public struct PaginationDecorator: ModelBasedGraphQLDocumentDecorator {
 
     private let limit: Int?
     private let nextToken: String?
+    private let queryType: GraphQLQueryType?
 
-    public init(limit: Int? = nil, nextToken: String? = nil) {
+    public init(limit: Int? = nil, nextToken: String? = nil, queryType: GraphQLQueryType? = nil) {
         self.limit = limit
         self.nextToken = nextToken
+        self.queryType = queryType
     }
 
     public func decorate(_ document: SingleDirectiveGraphQLDocument,
@@ -49,6 +51,11 @@ public struct PaginationDecorator: ModelBasedGraphQLDocumentDecorator {
         selectionSet.value.name = "items"
         newRoot.addChild(settingParentOf: selectionSet)
         newRoot.addChild(settingParentOf: SelectionSet(value: SelectionSetField(name: "nextToken", fieldType: .value)))
+
+        if let queryType = queryType, queryType == .search {
+            newRoot.addChild(settingParentOf:
+                SelectionSet(value: SelectionSetField(name: "total", fieldType: .value)))
+        }
         return newRoot
     }
 }

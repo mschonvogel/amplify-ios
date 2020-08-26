@@ -9,8 +9,10 @@
 /// `list` which returns multiple results and can optionally use filters
 /// `get`, which aims to fetch one result identified by its `id`.
 /// `sync`, similar to `list` and returns results with optionally specifically a point in time
+/// `search`, similar to `list` and returns results based on search filters and sort orders
 public enum GraphQLQueryType: String {
     case get
     case list
     case sync
+    case search
 }

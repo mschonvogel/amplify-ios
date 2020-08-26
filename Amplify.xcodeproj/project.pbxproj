@@ -118,6 +118,10 @@
 		21AD4257249BFFE00016FE95 /* DeprecatedTodo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AD4255249BFFDF0016FE95 /* DeprecatedTodo.swift */; };
 		21AD425A249C0D910016FE95 /* AnyModelTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213481D8242AFA62001966DE /* AnyModelTester.swift */; };
 		21AD425B249C0DBE0016FE95 /* AnyModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8EE772238621320097E4F1 /* AnyModelTests.swift */; };
+		21B675E524F70EBD00133B57 /* Vote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B675E324F70EBD00133B57 /* Vote.swift */; };
+		21B675E624F70EBD00133B57 /* Vote+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B675E424F70EBD00133B57 /* Vote+Schema.swift */; };
+		21B675E924F713A600133B57 /* SortDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B675E724F712EC00133B57 /* SortDecorator.swift */; };
+		21B675EB24F718FA00133B57 /* QuerySortBy+GraphQL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B675EA24F718FA00133B57 /* QuerySortBy+GraphQL.swift */; };
 		21C395B3245729EC00597EA2 /* AppSyncErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C395B2245729EC00597EA2 /* AppSyncErrorType.swift */; };
 		21D79FDA237617C60057D00D /* SubscriptionEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D79FD9237617C60057D00D /* SubscriptionEvent.swift */; };
 		21D79FE32377F4120057D00D /* SubscriptionConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D79FE22377F4120057D00D /* SubscriptionConnectionState.swift */; };
@@ -353,13 +357,13 @@
 		B9FAA180238FBB5D009414B4 /* Model+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FAA17F238FBB5D009414B4 /* Model+Array.swift */; };
 		B9FB05F82383740D00DE1FD4 /* DataStoreStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FB05F72383740D00DE1FD4 /* DataStoreStatement.swift */; };
 		D83C5160248964780091548E /* ModelGraphQLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83C515F248964780091548E /* ModelGraphQLTests.swift */; };
+		D8DD7A1D24A1CCCD001C49FD /* QuerySortInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DD7A1C24A1CCCD001C49FD /* QuerySortInput.swift */; };
 		FA00F68824DA37EE003E8A71 /* AuthCategoryBehavior+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00F68724DA37EE003E8A71 /* AuthCategoryBehavior+Combine.swift */; };
 		FA00F68A24DA3A43003E8A71 /* AuthCategoryDeviceBehavior+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00F68924DA3A43003E8A71 /* AuthCategoryDeviceBehavior+Combine.swift */; };
 		FA00F68C24DA3A8F003E8A71 /* AuthCategoryUserBehavior+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00F68B24DA3A8F003E8A71 /* AuthCategoryUserBehavior+Combine.swift */; };
 		FA00F68E24DA3DFF003E8A71 /* HubCategoryBehavior+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00F68D24DA3DFE003E8A71 /* HubCategoryBehavior+Combine.swift */; };
 		FA00F69024DA3F95003E8A71 /* HubCombineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00F68F24DA3F95003E8A71 /* HubCombineTests.swift */; };
 		FA00F69224DA4087003E8A71 /* PredictionsCategoryBehavior+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00F69124DA4087003E8A71 /* PredictionsCategoryBehavior+Combine.swift */; };
-		D8DD7A1D24A1CCCD001C49FD /* QuerySortInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DD7A1C24A1CCCD001C49FD /* QuerySortInput.swift */; };
 		FA0173352375F8A5005DDDFC /* LoggingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0173342375F8A5005DDDFC /* LoggingError.swift */; };
 		FA0173372375FAA5005DDDFC /* HubError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0173362375FAA5005DDDFC /* HubError.swift */; };
 		FA05B83424CE265E0026180B /* StorageCategory+ClientBehavior+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA05B83324CE265D0026180B /* StorageCategory+ClientBehavior+Combine.swift */; };
@@ -780,6 +784,10 @@
 		21A3FDB8246494CD00E76120 /* GraphQLRequestAuthRuleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLRequestAuthRuleTests.swift; sourceTree = "<group>"; };
 		21A3FDBE2465FA1500E76120 /* AuthRule+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthRule+Extension.swift"; sourceTree = "<group>"; };
 		21AD4255249BFFDF0016FE95 /* DeprecatedTodo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeprecatedTodo.swift; path = Deprecated/DeprecatedTodo.swift; sourceTree = "<group>"; };
+		21B675E324F70EBD00133B57 /* Vote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vote.swift; sourceTree = "<group>"; };
+		21B675E424F70EBD00133B57 /* Vote+Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Vote+Schema.swift"; sourceTree = "<group>"; };
+		21B675E724F712EC00133B57 /* SortDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortDecorator.swift; sourceTree = "<group>"; };
+		21B675EA24F718FA00133B57 /* QuerySortBy+GraphQL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuerySortBy+GraphQL.swift"; sourceTree = "<group>"; };
 		21C395B2245729EC00597EA2 /* AppSyncErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSyncErrorType.swift; sourceTree = "<group>"; };
 		21D79FD9237617C60057D00D /* SubscriptionEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionEvent.swift; sourceTree = "<group>"; };
 		21D79FE22377F4120057D00D /* SubscriptionConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionConnectionState.swift; sourceTree = "<group>"; };
@@ -1532,6 +1540,7 @@
 				2129BE1A2394806B006363A1 /* QueryPredicate+GraphQL.swift */,
 				212CE6FB23E9E523007D8E71 /* SelectionSet.swift */,
 				21A3FDBE2465FA1500E76120 /* AuthRule+Extension.swift */,
+				21B675EA24F718FA00133B57 /* QuerySortBy+GraphQL.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -1625,6 +1634,7 @@
 				212CE70723E9E990007D8E71 /* ConflictResolutionDecorator.swift */,
 				212CE71223E9F2ED007D8E71 /* DirectiveNameDecorator.swift */,
 				212CE70823E9E990007D8E71 /* FilterDecorator.swift */,
+				21B675E724F712EC00133B57 /* SortDecorator.swift */,
 				219A888023EB629800BBC5F2 /* ModelBasedGraphQLDocumentDecorator.swift */,
 				212CE70A23E9E991007D8E71 /* ModelDecorator.swift */,
 				212CE70623E9E990007D8E71 /* ModelIdDecorator.swift */,
@@ -2316,6 +2326,8 @@
 				214F49712486D8A100DA616C /* UserFollowers+Schema.swift */,
 				214F49722486D8A200DA616C /* UserFollowing.swift */,
 				214F49732486D8A200DA616C /* UserFollowing+Schema.swift */,
+				21B675E324F70EBD00133B57 /* Vote.swift */,
+				21B675E424F70EBD00133B57 /* Vote+Schema.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -4044,6 +4056,7 @@
 				B4EBEB64246204D000D06375 /* AuthAWSCredentialsProvider.swift in Sources */,
 				212CE6FC23E9E523007D8E71 /* SelectionSet.swift in Sources */,
 				2129BE1F2394806B006363A1 /* Model+GraphQL.swift in Sources */,
+				21B675EB24F718FA00133B57 /* QuerySortBy+GraphQL.swift in Sources */,
 				212CE70323E9E967007D8E71 /* GraphQLMutation.swift in Sources */,
 				2129BE0F23948005006363A1 /* SingleDirectiveGraphQLDocument.swift in Sources */,
 				21420A93237222A900FA140C /* CognitoUserPoolsConfiguration.swift in Sources */,
@@ -4054,6 +4067,7 @@
 				212CE71323E9F2ED007D8E71 /* DirectiveNameDecorator.swift in Sources */,
 				21420A92237222A900FA140C /* OIDCConfiguration.swift in Sources */,
 				21420A95237222A900FA140C /* AWSAuthServiceBehavior.swift in Sources */,
+				21B675E924F713A600133B57 /* SortDecorator.swift in Sources */,
 				21420A98237222A900FA140C /* AuthTokenProvider.swift in Sources */,
 				21420A91237222A900FA140C /* AWSAuthorizationConfiguration.swift in Sources */,
 				212CE70F23E9E991007D8E71 /* ModelDecorator.swift in Sources */,
@@ -4581,6 +4595,7 @@
 				FACA36152327FC39000E74F6 /* MessageReporter.swift in Sources */,
 				FAF512AE23986791001ADF4E /* AmplifyModels.swift in Sources */,
 				B9FAA11C23879B35009414B4 /* Book.swift in Sources */,
+				21B675E624F70EBD00133B57 /* Vote+Schema.swift in Sources */,
 				214F49772486D8A200DA616C /* UserFollowers+Schema.swift in Sources */,
 				B9FAA11423878CEA009414B4 /* UserProfile+Schema.swift in Sources */,
 				214F49792486D8A200DA616C /* UserFollowing+Schema.swift in Sources */,
@@ -4602,6 +4617,7 @@
 				B4F3E9FA24314ECC00F23296 /* MockAuthCategoryPlugin.swift in Sources */,
 				214F49CE24898E8500DA616C /* Article+Schema.swift in Sources */,
 				216E460A249183230035E3CE /* Section.swift in Sources */,
+				21B675E524F70EBD00133B57 /* Vote.swift in Sources */,
 				FA1846EE23998E44009B9D01 /* MockAPIResponders.swift in Sources */,
 				216E45ED248E914F0035E3CE /* Category.swift in Sources */,
 			);

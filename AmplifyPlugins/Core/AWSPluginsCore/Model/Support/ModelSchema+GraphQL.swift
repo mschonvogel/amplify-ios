@@ -15,7 +15,7 @@ extension ModelSchema {
     func graphQLName(queryType: GraphQLQueryType) -> String {
         let graphQLName: String
         switch queryType {
-        case .list:
+        case .list, .search:
             graphQLName = (queryType.rawValue + name).pluralize()
         case .sync:
             if let pluralName = pluralName {

@@ -13,9 +13,11 @@ import Foundation
 public struct FilterDecorator: ModelBasedGraphQLDocumentDecorator {
 
     private let filter: GraphQLFilter
+    private let queryType: GraphQLQueryType?
 
-    public init(filter: GraphQLFilter) {
+    public init(filter: GraphQLFilter, queryType: GraphQLQueryType? = nil) {
         self.filter = filter
+        self.queryType = queryType
     }
 
     public func decorate(_ document: SingleDirectiveGraphQLDocument,
@@ -26,8 +28,13 @@ public struct FilterDecorator: ModelBasedGraphQLDocumentDecorator {
             inputs["condition"] = GraphQLDocumentInput(type: "Model\(modelName)ConditionInput",
                 value: .object(filter))
         } else if case .query = document.operationType {
-            inputs["filter"] = GraphQLDocumentInput(type: "Model\(modelName)FilterInput",
-                value: .object(filter))
+            if let queryType = queryType, queryType == .search {
+                inputs["filter"] = GraphQLDocumentInput(type: "Searchable\(modelName)FilterInput",
+                    value: .object(filter))
+            } else {
+                inputs["filter"] = GraphQLDocumentInput(type: "Model\(modelName)FilterInput",
+                    value: .object(filter))
+            }
         }
 
         return document.copy(inputs: inputs)

@@ -43,6 +43,22 @@ protocol ModelGraphQLRequestFactory {
     /// - seealso: `GraphQLQuery`, `GraphQLQueryType.get`
     static func get<M: Model>(_ modelType: M.Type, byId id: String) -> GraphQLRequest<M?>
 
+
+    /// Creates a `GraphQLRequest` that represents a query that expects multiple values as a result.
+    /// The request will be created with the correct document based on the `ModelSchema` and
+    /// variables based on the the query predicate and sort input.
+    ///
+    /// - Parameters:
+    ///   - modelType: the metatype of the model
+    ///   - predicate: an optional predicate containing the criteria for the query
+    ///   - sortBy: describes how to sort the query results
+    /// - Returns: a valid `GraphQLRequest` instance
+    ///
+    /// - seealso: `GraphQLQuery`, `GraphQLQueryType.search`
+    static func search<M: Model>(_ modelType: M.Type,
+                                 where predicate: QueryPredicate?,
+                                 sort sortBy: QuerySortBy?) -> GraphQLRequest<[M]>
+
     // MARK: Mutation
 
     /// Creates a `GraphQLRequest` that represents a mutation of a given `type` for a `model` instance.
@@ -174,10 +190,32 @@ extension GraphQLRequest: ModelGraphQLRequestFactory {
         documentBuilder.add(decorator: DirectiveNameDecorator(type: .list))
 
         if let predicate = predicate {
-            documentBuilder.add(decorator: FilterDecorator(filter: predicate.graphQLFilter))
+            documentBuilder.add(decorator: FilterDecorator(filter: predicate.graphQLFilter, queryType: .list))
         }
 
         documentBuilder.add(decorator: PaginationDecorator())
+        let document = documentBuilder.build()
+
+        return GraphQLRequest<[M]>(document: document.stringValue,
+                                   variables: document.variables,
+                                   responseType: [M].self,
+                                   decodePath: document.name + ".items")
+    }
+
+    static func search<M: Model>(_ modelType: M.Type,
+                                 where predicate: QueryPredicate? = nil,
+                                 sort sortBy: QuerySortBy? = nil) -> GraphQLRequest<[M]> {
+        var documentBuilder = ModelBasedGraphQLDocumentBuilder(modelType: modelType, operationType: .query)
+        documentBuilder.add(decorator: DirectiveNameDecorator(type: .search))
+
+        if let predicate = predicate {
+            documentBuilder.add(decorator: FilterDecorator(filter: predicate.graphQLSearchFilter, queryType: .search))
+        }
+        if let sortBy = sortBy {
+            documentBuilder.add(decorator: SortDecorator(sortBy: sortBy))
+        }
+
+        documentBuilder.add(decorator: PaginationDecorator(queryType: .search))
         let document = documentBuilder.build()
 
         return GraphQLRequest<[M]>(document: document.stringValue,

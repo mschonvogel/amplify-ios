@@ -57,11 +57,26 @@ extension QueryPredicate {
         preconditionFailure(
             "Could not find QueryPredicateOperation or QueryPredicateGroup for \(String(describing: self))")
     }
+
+    public var graphQLSearchFilter: GraphQLFilter {
+        if let operation = self as? QueryPredicateOperation {
+            return operation.graphQLSearchFilter
+        } else if let group = self as? QueryPredicateGroup {
+            return group.graphQLSearchFilter
+        }
+
+        preconditionFailure(
+            "Could not find QueryPredicateOperation or QueryPredicateGroup for \(String(describing: self))")
+    }
 }
 
 extension QueryPredicateOperation: GraphQLFilterConvertible {
     var graphQLFilter: GraphQLFilter {
         return [field: [self.operator.graphQLOperator: self.operator.value]]
+    }
+
+    var graphQLSearchFilter: GraphQLFilter {
+        return [field: [self.operator.graphQLSearchOperator: self.operator.value]]
     }
 }
 
@@ -78,6 +93,24 @@ extension QueryPredicateGroup: GraphQLFilterConvertible {
         case .not:
             if let predicate = predicates.first {
                 return [logicalOperator: predicate.graphQLFilter]
+            } else {
+                preconditionFailure("Missing predicate for \(String(describing: self)) with type: \(type)")
+            }
+        }
+    }
+
+    var graphQLSearchFilter: GraphQLFilter {
+        let logicalOperator = type.rawValue
+        switch type {
+        case .and, .or:
+            var graphQLPredicateOperation = [logicalOperator: [Any]()]
+            predicates.forEach { predicate in
+                graphQLPredicateOperation[logicalOperator]?.append(predicate.graphQLSearchFilter)
+            }
+            return graphQLPredicateOperation
+        case .not:
+            if let predicate = predicates.first {
+                return [logicalOperator: predicate.graphQLSearchFilter]
             } else {
                 preconditionFailure("Missing predicate for \(String(describing: self)) with type: \(type)")
             }
@@ -105,6 +138,29 @@ extension QueryOperator {
             return "between"
         case .beginsWith:
             return "beginsWith"
+        }
+    }
+
+    var graphQLSearchOperator: String {
+        switch self {
+        case .notEqual:
+            return "ne"
+        case .equals:
+            return "eq"
+        case .lessOrEqual:
+            return "le"
+        case .lessThan:
+            return "lt"
+        case .greaterOrEqual:
+            return "ge"
+        case .greaterThan:
+            return "gt"
+        case .contains:
+            return "match"
+        case .between:
+            return "range"
+        case .beginsWith:
+            return "matchPhrasePrefix"
         }
     }
 
