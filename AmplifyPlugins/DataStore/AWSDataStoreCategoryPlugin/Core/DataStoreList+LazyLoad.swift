@@ -13,7 +13,7 @@ import Amplify
 /// loaded when it's needed.
 extension DataStoreList {
 
-    /// Represents the data state of the `List`.
+    /// Represents the data state of the `DataStoreList`.
     internal enum LoadState {
         case pending
         case loaded
@@ -45,6 +45,35 @@ extension DataStoreList {
                 completion(.success(elements))
             case .failure(let error):
                 completion(.failure(causedBy: error))
+            }
+        }
+    }
+
+    internal func fetchLazyLoad(_ completion: ListCallback<Elements>) {
+        // if the collection has no associated field, return the current elements
+        guard let associatedId = self.associatedId,
+              let associatedField = self.associatedField else {
+            completion(.success(elements))
+            return
+        }
+
+        // TODO: this is currently done by specific plugin implementations (API or DataStore)
+        // How to add this name resolution to Amplify?
+        let modelName = Element.modelName
+        var name = modelName.camelCased() + associatedField.name.pascalCased() + "Id"
+        if case let .belongsTo(_, targetName) = associatedField.association {
+            name = targetName ?? name
+        }
+
+        let predicate: QueryPredicate = field(name) == associatedId
+        Amplify.DataStore.query(Element.self, where: predicate) {
+            switch $0 {
+            case .success(let elements):
+                self.elements = elements
+                self.state = .loaded
+                completion(.success(elements))
+            case .failure(let error):
+                completion(.failure(.listOperation("Failed to load", "", error)))
             }
         }
     }

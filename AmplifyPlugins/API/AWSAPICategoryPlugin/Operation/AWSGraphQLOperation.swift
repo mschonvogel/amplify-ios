@@ -13,8 +13,7 @@ final public class AWSGraphQLOperation<R: Decodable>: GraphQLOperation<R> {
     let session: URLSessionBehavior
     let mapper: OperationTaskMapper
     let pluginConfig: AWSAPICategoryPluginConfiguration
-
-    var graphQLResponseData = Data()
+    let graphQLResponseDecoder: GraphQLResponseDecoder<R>
 
     init(request: GraphQLOperationRequest<R>,
          session: URLSessionBehavior,
@@ -25,7 +24,7 @@ final public class AWSGraphQLOperation<R: Decodable>: GraphQLOperation<R> {
         self.session = session
         self.mapper = mapper
         self.pluginConfig = pluginConfig
-
+        self.graphQLResponseDecoder = GraphQLResponseDecoder(request: request)
         super.init(categoryType: .api,
                    eventName: request.operationType.hubEventName,
                    request: request,
@@ -70,6 +69,7 @@ final public class AWSGraphQLOperation<R: Decodable>: GraphQLOperation<R> {
         // Prepare request payload
         let queryDocument = GraphQLOperationRequestUtils.getQueryDocument(document: request.document,
                                                                           variables: request.variables)
+
         if Amplify.API.log.logLevel == .verbose,
            let serializedJSON = try? JSONSerialization.data(withJSONObject: queryDocument,
                                                             options: .prettyPrinted),

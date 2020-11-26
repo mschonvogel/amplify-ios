@@ -13,7 +13,7 @@ import AWSPluginsCore
 @testable import AmplifyTestCommon
 @testable import AWSAPICategoryPluginTestCommon
 
-extension GraphQLModelBasedTests {
+extension GraphQLConnectionV2Tests {
 
     /// Test paginated list query returns a List containing pagination functionality. This test also aggregates page
     /// results by appending to an in-memory Array, useful to backing UI components which.
@@ -25,7 +25,7 @@ extension GraphQLModelBasedTests {
     /// - Then:
     ///    - the in-memory Array is a populated with all expected items.
     func testPaginatedListFetch() throws {
-        var resultsArray: [Post] = []
+        var resultsArray: [PostV2] = []
         let uuid1 = UUID().uuidString
         let uuid2 = UUID().uuidString
         let testMethodName = String("\(#function)".dropLast(2))
@@ -37,10 +37,10 @@ extension GraphQLModelBasedTests {
         }
 
         let firstQueryCompleted = expectation(description: "first query completed")
-        let post = Post.keys
+        let post = PostV2.keys
         let predicate = post.id == uuid1 || post.id == uuid2
-        var results: List<Post>?
-        _ = Amplify.API.query(request: .paginatedList(Post.self, where: predicate, limit: 1)) { event in
+        var results: List<PostV2>?
+        _ = Amplify.API.query(request: .paginatedList(PostV2.self, where: predicate, limit: 1)) { event in
             switch event {
             case .success(let response):
                 guard case let .success(graphQLResponse) = response else {
@@ -101,10 +101,10 @@ extension GraphQLModelBasedTests {
         }
 
         let firstQueryCompleted = expectation(description: "first query completed")
-        let post = Post.keys
+        let post = PostV2.keys
         let predicate = post.id == uuid1
-        var results: List<Post>?
-        _ = Amplify.API.query(request: .paginatedList(Post.self, where: predicate)) { event in
+        var results: List<PostV2>?
+        _ = Amplify.API.query(request: .paginatedList(PostV2.self, where: predicate)) { event in
             switch event {
             case .success(let response):
                 guard case let .success(graphQLResponse) = response else {
@@ -159,7 +159,6 @@ extension GraphQLModelBasedTests {
         wait(for: [invalidFetchCompleted], timeout: TestCommonConstants.networkTimeout)
     }
 
-    // This does not work as expected. Service does not provide a way to fetch comments by postId
     func testFetchListOfCommentsFromPost() {
         let uuid1 = UUID().uuidString
         let testMethodName = String("\(#function)".dropLast(2))
@@ -168,14 +167,14 @@ extension GraphQLModelBasedTests {
             XCTFail("Failed to create post")
             return
         }
-        guard let createdComment = createComment(content: title, post: createdPost) else {
+        guard createComment(content: title, post: createdPost) != nil else {
             XCTFail("Failed to create comment")
             return
         }
 
         let firstQueryCompleted = expectation(description: "first query completed")
-        var results: Post?
-        _ = Amplify.API.query(request: .get(Post.self, byId: createdPost.id)) { event in
+        var post: PostV2?
+        _ = Amplify.API.query(request: .get(PostV2.self, byId: createdPost.id)) { event in
             switch event {
             case .success(let response):
                 guard case let .success(graphQLResponse) = response else {
@@ -183,7 +182,7 @@ extension GraphQLModelBasedTests {
                     return
                 }
 
-                results = graphQLResponse
+                post = graphQLResponse
                 firstQueryCompleted.fulfill()
             case .failure(let error):
                 XCTFail("Unexpected .failure event: \(error)")
@@ -191,13 +190,17 @@ extension GraphQLModelBasedTests {
         }
 
         wait(for: [firstQueryCompleted], timeout: TestCommonConstants.networkTimeout)
-        guard var retrievedPost = results else {
+        guard let retrievedPost = post else {
             XCTFail("Could not get post")
             return
         }
-        XCTAssertTrue(retrievedPost.comments.isEmpty)
+        guard let comments = retrievedPost.comments else {
+            XCTFail("Could not get comments")
+            return
+        }
+        XCTAssertTrue(comments.isEmpty)
         let fetchCommentsCompleted = expectation(description: "Fetch comments completed")
-        retrievedPost.comments?.fetch { result in
+        comments.fetch { result in
             switch result {
             case .success(let comments):
                 print("comments \(comments)")
@@ -207,5 +210,9 @@ extension GraphQLModelBasedTests {
             }
         }
         wait(for: [fetchCommentsCompleted], timeout: TestCommonConstants.networkTimeout)
+        XCTAssertFalse(comments.isEmpty)
+        comments.forEach { comment in
+            XCTAssertEqual(comment.postID, retrievedPost.id)
+        }
     }
 }

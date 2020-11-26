@@ -142,3 +142,16 @@ type User5 @model {
   username: String!
   posts: [PostEditor5] @connection(keyName: "byEditor5", fields: ["id"])
 }
+
+type CommentV2 @model @auth(rules: [{allow: public}]) @key(name: "byPost", fields: ["postID"]) {
+  id: ID!
+  content: String
+  postID: ID!
+}
+
+type PostV2 @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  title: String
+  description: String
+  comments: [CommentV2] @connection(keyName: "byPost", fields: ["id"])
+}
