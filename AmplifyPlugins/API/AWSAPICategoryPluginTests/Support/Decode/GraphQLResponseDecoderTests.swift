@@ -6,11 +6,10 @@
 //
 
 import XCTest
-import Amplify
+@testable import Amplify
 import AWSPluginsCore
 @testable import AmplifyTestCommon
 @testable import AWSAPICategoryPlugin
-
 
 class GraphQLResponseDecoderTests: XCTestCase {
     static let decoder = JSONDecoder()
@@ -122,7 +121,6 @@ class GraphQLResponseDecoderTests: XCTestCase {
             ]
         ]
 
-
         let result = try decoder.decodeToResponseType(graphQLData)
         XCTAssertNotNil(result)
         XCTAssertEqual(result.count, 2)
@@ -134,24 +132,21 @@ class GraphQLResponseDecoderTests: XCTestCase {
         XCTAssertEqual(appSyncList.nextToken, "nextToken123")
     }
 
-    // TODO: refactor to use PostV2
     func testDecodeToPostWithComments() throws {
+        Amplify.reset()
         ModelListDecoderRegistry.registerDecoder(AppSyncList<AnyModel>.self)
-        ModelRegistry.register(modelType: Post.self)
-        ModelRegistry.register(modelType: Comment.self)
-        let request = GraphQLRequest<Post>(document: "",
-                                           responseType: Post.self,
-                                           decodePath: "data.getPost")
+        ModelRegistry.register(modelType: Post3.self)
+        ModelRegistry.register(modelType: Comment3.self)
+        let request = GraphQLRequest<Post3>(document: "",
+                                            responseType: Post3.self,
+                                            decodePath: "data.getPost3")
         let decoder = GraphQLResponseDecoder(request: request.toOperationRequest(operationType: .query))
         let graphQLData: [String: JSONValue] = [
             "data": [
-                "getPost": [
+                "getPost3": [
                     "id": .string("postId123"),
-                    "content": .string("content"),
                     "title": .string("title"),
-                    "createdAt": .string(Temporal.DateTime.now().iso8601String),
-                    "updatedAt": .string(Temporal.DateTime.now().iso8601String),
-                    "__typename": "Post"
+                    "__typename": "Post3"
                 ]
             ]
         ]
@@ -173,7 +168,7 @@ class GraphQLResponseDecoderTests: XCTestCase {
         XCTAssertNotNil(appSyncList.associatedId)
         XCTAssertEqual(appSyncList.associatedId!, "postId123")
         XCTAssertNotNil(appSyncList.associatedField)
-        XCTAssertEqual(appSyncList.associatedField!.name, "post")
+        XCTAssertEqual(appSyncList.associatedField!.name, "postID")
         XCTAssertNil(appSyncList.nextToken)
 
         let apiConfig = APICategoryConfiguration(plugins: ["MockAPICategoryPlugin": true])
@@ -183,13 +178,13 @@ class GraphQLResponseDecoderTests: XCTestCase {
         try Amplify.configure(amplifyConfig)
 
         let apiWasQueried = expectation(description: "API was queried")
-        let responder = QueryRequestListenerResponder<AppSyncList<Comment>> { _, listener in
-            let comment = Comment(content: "content", createdAt: .now(), post: post)
-            let list = AppSyncList<Comment>([comment, comment],
-                                            nextToken: "nextTokenForComments",
-                                            document: "",
-                                            variables: ["limit": 1_000])
-            let event: GraphQLOperation<AppSyncList<Comment>>.OperationResult = .success(.success(list))
+        let responder = QueryRequestListenerResponder<AppSyncList<Comment3>> { _, listener in
+            let comment = Comment3(id: "content", postID: post.id, content: "content")
+            let list = AppSyncList<Comment3>([comment, comment],
+                                             nextToken: "nextTokenForComments",
+                                             document: "",
+                                             variables: ["limit": 1_000])
+            let event: GraphQLOperation<AppSyncList<Comment3>>.OperationResult = .success(.success(list))
             listener?(event)
             apiWasQueried.fulfill()
             return nil

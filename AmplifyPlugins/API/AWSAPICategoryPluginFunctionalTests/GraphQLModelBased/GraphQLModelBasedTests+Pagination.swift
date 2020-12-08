@@ -136,7 +136,6 @@ extension GraphQLModelBasedTests {
                 case .failure(let coreError):
                     XCTFail("Unexpected error: \(coreError)")
                 }
-
             }
             semaphore.wait()
         }
@@ -159,8 +158,14 @@ extension GraphQLModelBasedTests {
         wait(for: [invalidFetchCompleted], timeout: TestCommonConstants.networkTimeout)
     }
 
-    // This does not work as expected. Service does not provide a way to fetch comments by postId
-    func testFetchListOfCommentsFromPost() {
+    // Create Post and comment with post
+    // Query for the post and try to fetch the comments
+    // This is expected to fail since the fetch for comments performs an API call
+    // to list the comments by postId. The API does not provide a way to filter on
+    // postID, in turn this test is purely to show the limitation with using the
+    // older connection directive. A possible future implementation could involve loading
+    // all of the comments with the predicate that excludes the postId, followed by performing a client predicate matching on the postID
+    func testFetchListOfCommentsFromPostFails() {
         let uuid1 = UUID().uuidString
         let testMethodName = String("\(#function)".dropLast(2))
         let title = testMethodName + "Title"
@@ -196,16 +201,15 @@ extension GraphQLModelBasedTests {
             return
         }
         XCTAssertTrue(retrievedPost.comments.isEmpty)
-        let fetchCommentsCompleted = expectation(description: "Fetch comments completed")
+        let fetchCommentsFailed = expectation(description: "Fetch comments failed")
         retrievedPost.comments?.fetch { result in
             switch result {
             case .success(let comments):
-                print("comments \(comments)")
-                fetchCommentsCompleted.fulfill()
+                XCTFail("Should have failed to fetch comments \(comments)")
             case .failure(let coreError):
-                print("Error: \(coreError)")
+                fetchCommentsFailed.fulfill()
             }
         }
-        wait(for: [fetchCommentsCompleted], timeout: TestCommonConstants.networkTimeout)
+        wait(for: [fetchCommentsFailed], timeout: TestCommonConstants.networkTimeout)
     }
 }

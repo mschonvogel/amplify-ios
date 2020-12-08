@@ -38,20 +38,22 @@ extension GraphQLResponseDecoder {
     }
 
     func decodeToModelWithConnections(graphQLData: JSONValue) throws -> R? {
-        let modelName = try getModelName(graphQLData: graphQLData)
-        guard let modelType = ModelRegistry.modelType(from: modelName) else {
+        guard let modelName = try getModelName(graphQLData: graphQLData),
+              let modelType = ModelRegistry.modelType(from: modelName) else {
             return nil
         }
-        let associations = modelType.schema.fields.values.filter {
+        let arrayAssociations = modelType.schema.fields.values.filter {
             $0.isArray && $0.hasAssociation
         }
-        guard !associations.isEmpty else {
+        guard !arrayAssociations.isEmpty,
+              let id = try getId(graphQLData: graphQLData),
+              case .object(var graphQLDataObject) = graphQLData else {
             return nil
         }
-        let id = try getId(graphQLData: graphQLData)
-        guard case .object(var graphQLDataObject) = graphQLData else {
-            return nil
-        }
+
+        // Iterate over the associations of the model and for each association, store it's association data
+        // For example, if the modelType is a Post and has a field that is an array association like Comment
+        // Store the post's id and post field in the comments as the `associationPayload`
         modelType.schema.fields.values.forEach { modelField in
             if modelField.isArray && modelField.hasAssociation,
                let associatedField = modelField.associatedField {
@@ -72,31 +74,27 @@ extension GraphQLResponseDecoder {
         return try decoder.decode(request.responseType, from: serializedJSON)
     }
 
-    func getModelName(graphQLData: JSONValue) throws -> String {
+    func getModelName(graphQLData: JSONValue) throws -> String? {
         guard case .string(let typename) = graphQLData["__typename"] else {
-            throw APIError.operationError(
-                "Could not retrieve __typename from object",
-                """
+            Amplify.API.log.error("""
                 Could not retrieve the `__typename` attribute from the return value. Be sure to include __typename in \
                 the selection set of the GraphQL operation. GraphQL:
                 \(graphQLData)
-                """
-            )
+                """)
+            return nil
         }
 
         return typename
     }
 
-    func getId(graphQLData: JSONValue) throws -> String {
+    func getId(graphQLData: JSONValue) throws -> String? {
         guard case .string(let id) = graphQLData["id"] else {
-            throw APIError.operationError(
-                "Could not retrieve id from object",
-                """
+            Amplify.API.log.error("""
                 Could not retrieve the `id` attribute from the return value. Be sure to include `id` in \
                 the selection set of the GraphQL operation. GraphQL:
                 \(graphQLData)
-                """
-            )
+                """)
+            return nil
         }
 
         return id

@@ -28,7 +28,12 @@ extension AppSyncList {
         documentBuilder.add(decorator: DirectiveNameDecorator(type: .list))
 
         if let associatedField = associatedField {
-            let predicate: QueryPredicate = field(associatedField.name) == associatedId
+            var fieldName = associatedField.name
+            if case let .belongsTo(_, targetName) = associatedField.association {
+                // use the default service generated field name if the targetName does not exist
+                fieldName = targetName ?? ModelType.modelName.camelCased() + associatedField.name.pascalCased() + "Id"
+            }
+            let predicate: QueryPredicate = field(fieldName) == associatedId
             documentBuilder.add(decorator: FilterDecorator(filter: predicate.graphQLFilter))
         }
 
