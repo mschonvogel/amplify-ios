@@ -131,6 +131,29 @@ type User5 @model {
   posts: [PostEditor5] @connection(keyName: "byEditor5", fields: ["id"])
 }
 
+
+# 6 - Blog Post Comment
+
+type Blog6 @model {
+  id: ID!
+  name: String!
+  posts: [Post6] @connection(keyName: "byBlog", fields: ["id"])
+}
+
+type Post6 @model @key(name: "byBlog", fields: ["blogID"]) {
+  id: ID!
+  title: String!
+  blogID: ID!
+  blog: Blog6 @connection(fields: ["blogID"])
+  comments: [Comment6] @connection(keyName: "byPost", fields: ["id"])
+}
+
+type Comment6 @model @key(name: "byPost", fields: ["postID", "content"]) {
+  id: ID!
+  postID: ID!
+  post: Post6 @connection(fields: ["postID"])
+  content: String!
+}
 ```
 
 3.  `amplify push`

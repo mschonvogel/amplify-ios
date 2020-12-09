@@ -79,6 +79,12 @@
 		214F49CE24898E8500DA616C /* Article+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214F49CC24898E8500DA616C /* Article+Schema.swift */; };
 		21558E3E237BB4BF0032A5BB /* GraphQLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21558E3D237BB4BF0032A5BB /* GraphQLRequest.swift */; };
 		21558E40237CB8640032A5BB /* GraphQLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21558E3F237CB8640032A5BB /* GraphQLError.swift */; };
+		21605D4725802A850011991F /* Comment6+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21605D4125802A850011991F /* Comment6+Schema.swift */; };
+		21605D4825802A850011991F /* Post6.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21605D4225802A850011991F /* Post6.swift */; };
+		21605D4925802A850011991F /* Blog6+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21605D4325802A850011991F /* Blog6+Schema.swift */; };
+		21605D4A25802A850011991F /* Blog6.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21605D4425802A850011991F /* Blog6.swift */; };
+		21605D4B25802A850011991F /* Comment6.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21605D4525802A850011991F /* Comment6.swift */; };
+		21605D4C25802A850011991F /* Post6+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21605D4625802A850011991F /* Post6+Schema.swift */; };
 		2167C090253F9425008B5CC3 /* Paginatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167C08F253F9424008B5CC3 /* Paginatable.swift */; };
 		2167C099253F9472008B5CC3 /* ModelList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167C098253F9472008B5CC3 /* ModelList.swift */; };
 		2167C0A2253F948F008B5CC3 /* ModelListDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167C0A1253F948F008B5CC3 /* ModelListDecoder.swift */; };
@@ -854,6 +860,12 @@
 		21558E3D237BB4BF0032A5BB /* GraphQLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLRequest.swift; sourceTree = "<group>"; };
 		21558E3F237CB8640032A5BB /* GraphQLError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLError.swift; sourceTree = "<group>"; };
 		215F4BCAAB89FA54AA121BDE /* Pods-AmplifyAWSPlugins-AWSPluginsCore-AWSPinpointAnalyticsPlugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AmplifyAWSPlugins-AWSPluginsCore-AWSPinpointAnalyticsPlugin.release.xcconfig"; path = "Target Support Files/Pods-AmplifyAWSPlugins-AWSPluginsCore-AWSPinpointAnalyticsPlugin/Pods-AmplifyAWSPlugins-AWSPluginsCore-AWSPinpointAnalyticsPlugin.release.xcconfig"; sourceTree = "<group>"; };
+		21605D4125802A850011991F /* Comment6+Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Comment6+Schema.swift"; sourceTree = "<group>"; };
+		21605D4225802A850011991F /* Post6.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post6.swift; sourceTree = "<group>"; };
+		21605D4325802A850011991F /* Blog6+Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Blog6+Schema.swift"; sourceTree = "<group>"; };
+		21605D4425802A850011991F /* Blog6.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Blog6.swift; sourceTree = "<group>"; };
+		21605D4525802A850011991F /* Comment6.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment6.swift; sourceTree = "<group>"; };
+		21605D4625802A850011991F /* Post6+Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Post6+Schema.swift"; sourceTree = "<group>"; };
 		2167C08F253F9424008B5CC3 /* Paginatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paginatable.swift; sourceTree = "<group>"; };
 		2167C098253F9472008B5CC3 /* ModelList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelList.swift; sourceTree = "<group>"; };
 		2167C0A1253F948F008B5CC3 /* ModelListDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelListDecoder.swift; sourceTree = "<group>"; };
@@ -1876,6 +1888,19 @@
 			path = Provider;
 			sourceTree = "<group>";
 		};
+		21605D4025802A500011991F /* 6 */ = {
+			isa = PBXGroup;
+			children = (
+				21605D4425802A850011991F /* Blog6.swift */,
+				21605D4325802A850011991F /* Blog6+Schema.swift */,
+				21605D4525802A850011991F /* Comment6.swift */,
+				21605D4125802A850011991F /* Comment6+Schema.swift */,
+				21605D4225802A850011991F /* Post6.swift */,
+				21605D4625802A850011991F /* Post6+Schema.swift */,
+			);
+			path = 6;
+			sourceTree = "<group>";
+		};
 		21687A3F236371E1004A056E /* Error */ = {
 			isa = PBXGroup;
 			children = (
@@ -1906,6 +1931,7 @@
 				217D5F0525780564009F0639 /* 3 */,
 				217D5F0D2578057A009F0639 /* 4 */,
 				217D5F152578058A009F0639 /* 5 */,
+				21605D4025802A500011991F /* 6 */,
 				217D5ECD2577FA1B009F0639 /* connection-schema.graphql */,
 			);
 			path = Collection;
@@ -5090,6 +5116,7 @@
 				217D5EB72577F9DF009F0639 /* Project1+Schema.swift in Sources */,
 				FA4A955F239ADEBD008E876E /* MockResponder.swift in Sources */,
 				214F497A2486D8A200DA616C /* User.swift in Sources */,
+				21605D4A25802A850011991F /* Blog6.swift in Sources */,
 				B9FAA11223878C96009414B4 /* UserAccount+Schema.swift in Sources */,
 				FACA36152327FC39000E74F6 /* MessageReporter.swift in Sources */,
 				FAF512AE23986791001ADF4E /* AmplifyModels.swift in Sources */,
@@ -5099,12 +5126,14 @@
 				975751B424D21DE000FA0A6E /* MockDevMenuContextProvider.swift in Sources */,
 				6B597A0A2565D3E50038C3E2 /* QPredGen+Schema.swift in Sources */,
 				214F49772486D8A200DA616C /* UserFollowers+Schema.swift in Sources */,
+				21605D4925802A850011991F /* Blog6+Schema.swift in Sources */,
 				B9FAA11423878CEA009414B4 /* UserProfile+Schema.swift in Sources */,
 				217D5EBC2577F9DF009F0639 /* User5.swift in Sources */,
 				217D5EB82577F9DF009F0639 /* Project2+Schema.swift in Sources */,
 				214F49792486D8A200DA616C /* UserFollowing+Schema.swift in Sources */,
 				FACA361D2327FC84000E74F6 /* MockAPICategoryPlugin.swift in Sources */,
 				B9FAA11023878C5E009414B4 /* UserProfile.swift in Sources */,
+				21605D4B25802A850011991F /* Comment6.swift in Sources */,
 				B9AA09F12473CA29000E6FBB /* PostStatus.swift in Sources */,
 				6BEE081C2533CCFA00133961 /* OGCScenarioBPost+Schema.swift in Sources */,
 				214F497B2486D8A200DA616C /* User+Schema.swift in Sources */,
@@ -5112,6 +5141,7 @@
 				B9FAA12023879BD0009414B4 /* BookAuthor+Schema.swift in Sources */,
 				21F40A4023A295470074678E /* TestCommonConstants.swift in Sources */,
 				217D5EB32577F9DF009F0639 /* Comment3.swift in Sources */,
+				21605D4C25802A850011991F /* Post6+Schema.swift in Sources */,
 				214F497C2486D8A200DA616C /* UserFollowers.swift in Sources */,
 				217D5EB62577F9DF009F0639 /* Comment3+Schema.swift in Sources */,
 				B9521835237E21BA00F53237 /* Comment.swift in Sources */,
@@ -5124,6 +5154,7 @@
 				217D5EC12577F9DF009F0639 /* Team2.swift in Sources */,
 				217D5EBE2577F9DF009F0639 /* Post5+Schema.swift in Sources */,
 				214F49782486D8A200DA616C /* UserFollowing.swift in Sources */,
+				21605D4725802A850011991F /* Comment6+Schema.swift in Sources */,
 				21F40A3C23A2952C0074678E /* AuthHelper.swift in Sources */,
 				6BEE08242533D30800133961 /* OGCScenarioBMGroupPost.swift in Sources */,
 				217D5EC22577F9DF009F0639 /* User5+Schema.swift in Sources */,
@@ -5131,6 +5162,7 @@
 				B4F3E9FA24314ECC00F23296 /* MockAuthCategoryPlugin.swift in Sources */,
 				214F49CE24898E8500DA616C /* Article+Schema.swift in Sources */,
 				216E460A249183230035E3CE /* Section.swift in Sources */,
+				21605D4825802A850011991F /* Post6.swift in Sources */,
 				217D5EBA2577F9DF009F0639 /* Post4+Schema.swift in Sources */,
 				217D5EBD2577F9DF009F0639 /* Post5.swift in Sources */,
 				FA1846EE23998E44009B9D01 /* MockAPIResponders.swift in Sources */,

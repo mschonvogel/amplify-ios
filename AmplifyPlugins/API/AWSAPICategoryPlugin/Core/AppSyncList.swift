@@ -158,8 +158,7 @@ public class AppSyncList<ModelType: Model>: List<ModelType>, ModelListDecoder {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = ModelDateFormatting.decodingStrategy
             let elements = try payload.getItems().map { (jsonElement) -> ModelType in
-                let serializedJSON = try encoder.encode(jsonElement)
-                return try decoder.decode(ModelType.self, from: serializedJSON)
+                return try AppSyncList.decodeToModelWithConnections(graphQLData: jsonElement)
             }
 
             self.init(elements,
@@ -199,5 +198,58 @@ public class AppSyncList<ModelType: Model>: List<ModelType>, ModelListDecoder {
         }
 
         self.init([ModelType]())
+    }
+
+    static func decodeToModelWithConnections(graphQLData: JSONValue) throws -> ModelType {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = ModelDateFormatting.encodingStrategy
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = ModelDateFormatting.decodingStrategy
+
+        let arrayAssociations = ModelType.schema.fields.values.filter {
+            $0.isArray && $0.hasAssociation
+        }
+        guard !arrayAssociations.isEmpty,
+              let id = try getId(graphQLData: graphQLData),
+              case .object(var graphQLDataObject) = graphQLData else {
+            let serializedJSON = try encoder.encode(graphQLData)
+            return try decoder.decode(ModelType.self, from: serializedJSON)
+        }
+
+        // Iterate over the associations of the model and for each association, store it's association data
+        // For example, if the modelType is a Post and has a field that is an array association like Comment
+        // Store the post's id and post field in the comments as the `associationPayload`
+        ModelType.schema.fields.values.forEach { modelField in
+            if modelField.isArray && modelField.hasAssociation,
+               let associatedField = modelField.associatedField {
+                let modelFieldName = modelField.name
+                let associatedFieldName = associatedField.name
+
+                if graphQLData[modelFieldName] == nil {
+                    let associationPayload: JSONValue = [
+                        "associatedId": .string(id),
+                        "associatedField": .string(associatedFieldName)
+                    ]
+
+                    graphQLDataObject.updateValue(associationPayload, forKey: modelFieldName)
+                }
+            }
+        }
+
+        let serializedJSON = try encoder.encode(graphQLDataObject)
+        return try decoder.decode(ModelType.self, from: serializedJSON)
+    }
+
+    static func getId(graphQLData: JSONValue) throws -> String? {
+        guard case .string(let id) = graphQLData["id"] else {
+            Amplify.API.log.error("""
+                Could not retrieve the `id` attribute from the return value. Be sure to include `id` in \
+                the selection set of the GraphQL operation. GraphQL:
+                \(graphQLData)
+                """)
+            return nil
+        }
+
+        return id
     }
 }
